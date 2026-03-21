@@ -50,9 +50,9 @@ When submitting to [`obsidianmd/obsidian-releases`](https://github.com/obsidianm
 
 - `id`: `set-to-root`
 - `name`: `Set to Root`
-- `author`: `BROCCOLI`
+- `author`: `lixingyu`
 - `description`: `Open additional File Explorer tabs rooted to a specific folder.`
-- `repo`: your GitHub repository in the form `owner/repo`
+- `repo`: `lixingyu41/obsidian-setToRoot`
 
 ## License
 

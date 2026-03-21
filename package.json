@@ -13,7 +13,7 @@
     "obsidian-plugin",
     "file-explorer"
   ],
-  "author": "BROCCOLI",
+  "author": "lixingyu",
   "license": "MIT",
   "type": "commonjs",
   "devDependencies": {
