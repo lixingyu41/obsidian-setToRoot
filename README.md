@@ -31,29 +31,6 @@ To run a production build:
 npm run build
 ```
 
-## Releasing
-
-Before creating a GitHub release:
-
-1. Update `manifest.json` with the target plugin version and minimum supported Obsidian version.
-2. Update `versions.json` with the mapping from plugin version to minimum Obsidian version.
-3. Build the plugin with `npm run build`.
-4. Create a GitHub release whose tag exactly matches the plugin version in `manifest.json`.
-5. Upload these files to the release:
-   - `manifest.json`
-   - `main.js`
-   - `styles.css`
-
-## Community Plugin Submission
-
-When submitting to [`obsidianmd/obsidian-releases`](https://github.com/obsidianmd/obsidian-releases), the repository entry needs:
-
-- `id`: `set-to-root`
-- `name`: `Set to Root`
-- `author`: `lixingyu`
-- `description`: `Open additional File Explorer tabs rooted to a specific folder.`
-- `repo`: `lixingyu41/obsidian-setToRoot`
-
 ## License
 
 MIT
