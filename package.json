@@ -1,0 +1,25 @@
+{
+  "name": "obsidian-set-to-root",
+  "version": "0.1.0",
+  "description": "Obsidian plugin that opens File Explorer tabs rooted to a specific folder.",
+  "main": "main.js",
+  "scripts": {
+    "build": "tsc --noEmit && node esbuild.config.mjs --production",
+    "dev": "node esbuild.config.mjs",
+    "check": "tsc --noEmit"
+  },
+  "keywords": [
+    "obsidian",
+    "obsidian-plugin",
+    "file-explorer"
+  ],
+  "author": "BROCCOLI",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "esbuild": "^0.27.4",
+    "obsidian": "^1.12.3",
+    "typescript": "^5.9.3"
+  }
+}
