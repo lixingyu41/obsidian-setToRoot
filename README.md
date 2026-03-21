@@ -2,6 +2,8 @@
 
 An Obsidian plugin that opens additional File Explorer tabs rooted to a specific folder.
 
+Desktop only.
+
 ## Features
 
 - Adds `Set to root` / `设置为根目录` to the folder context menu in the default File Explorer.
@@ -30,6 +32,8 @@ To run a production build:
 ```bash
 npm run build
 ```
+
+Do not commit `main.js` to the source repository. Keep it as a release artifact only.
 
 ## License
 
