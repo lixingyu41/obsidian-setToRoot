@@ -448,7 +448,7 @@ class RootExplorerFallbackView extends View {
     this.icon = options.getIcon();
   }
 
-  override async onOpen(): Promise<void> {
+  override onOpen(): Promise<void> {
     this.containerEl.empty();
     this.containerEl.createDiv({ cls: "set-to-root-empty-state" }, (container) => {
       container.createDiv({
@@ -460,6 +460,7 @@ class RootExplorerFallbackView extends View {
         text: t("emptyDescription")
       });
     });
+    return Promise.resolve();
   }
 
   override getViewType(): string {
@@ -480,8 +481,9 @@ class RootExplorerFallbackView extends View {
     };
   }
 
-  override async setState(state: unknown, _result: ViewStateResult): Promise<void> {
+  override setState(state: unknown, _result: ViewStateResult): Promise<void> {
     const nextState = normalizeState(state);
     this.rootPath = nextState.rootPath;
+    return Promise.resolve();
   }
 }

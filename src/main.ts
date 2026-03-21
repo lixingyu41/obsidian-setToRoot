@@ -55,14 +55,10 @@ export default class SetToRootPlugin extends Plugin {
     );
   }
 
-  override onunload(): void {
-    this.app.workspace.detachLeavesOfType(ROOTED_FILE_EXPLORER_VIEW_TYPE);
-  }
-
   async updateSettings(nextSettings: SetToRootSettings): Promise<void> {
     this.settings = normalizeSettings(nextSettings);
     await this.saveData(this.settings);
-    await this.refreshRootedLeaves();
+    this.refreshRootedLeaves();
   }
 
   getRootedViewIcon(): string {
@@ -108,7 +104,7 @@ export default class SetToRootPlugin extends Plugin {
     );
   }
 
-  private async refreshRootedLeaves(): Promise<void> {
+  private refreshRootedLeaves(): void {
     if (this.settings.viewMode === "single") {
       this.enforceSingleRootedLeaf();
     }
@@ -127,7 +123,9 @@ export default class SetToRootPlugin extends Plugin {
       return;
     }
 
-    const activeLeaf = this.app.workspace.activeLeaf;
+    const activeView = this.app.workspace.getActiveViewOfType(View);
+    const activeLeaf =
+      activeView?.getViewType() === ROOTED_FILE_EXPLORER_VIEW_TYPE ? activeView.leaf : null;
     const keepLeaf =
       (activeLeaf && leaves.contains(activeLeaf) ? activeLeaf : null) ??
       leaves[leaves.length - 1];
