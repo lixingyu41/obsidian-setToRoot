@@ -32,9 +32,6 @@ To run a production build:
 ```bash
 npm run build
 ```
-
-Do not commit `main.js` to the source repository. Keep it as a release artifact only.
-
 ## License
 
 MIT
