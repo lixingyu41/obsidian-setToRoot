@@ -13,8 +13,7 @@ export const DEFAULT_SETTINGS: SetToRootSettings = {
 };
 
 export function normalizeSettings(data: unknown): SetToRootSettings {
-  const settings =
-    data && typeof data === "object" ? ({ ...DEFAULT_SETTINGS, ...(data as Partial<SetToRootSettings>) } as Partial<SetToRootSettings>) : DEFAULT_SETTINGS;
+  const settings = getSettingsObject(data);
 
   return {
     viewMode: settings.viewMode === "single" ? "single" : "multiple",
@@ -31,6 +30,17 @@ export function resolveViewIcon(iconName: string | null | undefined): string {
   return isValidViewIcon(normalized) ? normalized : DEFAULT_SETTINGS.viewIcon;
 }
 
-export function isValidViewIcon(iconName: string): boolean {
-  return getIconIds().contains(iconName);
+function getSettingsObject(data: unknown): Partial<SetToRootSettings> {
+  if (!data || typeof data !== "object") {
+    return DEFAULT_SETTINGS;
+  }
+
+  return {
+    ...DEFAULT_SETTINGS,
+    ...(data as Partial<SetToRootSettings>)
+  };
+}
+
+function isValidViewIcon(iconName: string): boolean {
+  return getIconIds().includes(iconName);
 }

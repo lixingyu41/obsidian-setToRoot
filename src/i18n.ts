@@ -7,6 +7,9 @@ type LocaleKey =
   | "emptyMissingTitle"
   | "emptyDescription"
   | "rootUnavailable"
+  | "rootChanged"
+  | "actionRefresh"
+  | "menuOpenFile"
   | "settingsViewModeName"
   | "settingsViewModeDesc"
   | "settingsViewModeSingle"
@@ -28,6 +31,9 @@ const ENGLISH: LocaleTable = {
   emptyMissingTitle: "The configured root folder is unavailable",
   emptyDescription: 'Right-click a folder in the default file explorer and choose "Set to root".',
   rootUnavailable: "The selected root folder is unavailable.",
+  rootChanged: "Root folder changed.",
+  actionRefresh: "Refresh",
+  menuOpenFile: "Open file",
   settingsViewModeName: "Rooted view instances",
   settingsViewModeDesc: "Choose whether Set to root reuses one rooted explorer or opens additional ones.",
   settingsViewModeSingle: "Single view",
@@ -48,6 +54,9 @@ const CHINESE: LocaleTable = {
   emptyMissingTitle: "已设置的根目录不可用",
   emptyDescription: "请在默认文件列表中右键文件夹，然后选择“设置为根目录”。",
   rootUnavailable: "所选根目录不可用。",
+  rootChanged: "根目录已更改。",
+  actionRefresh: "刷新",
+  menuOpenFile: "打开文件",
   settingsViewModeName: "根目录视图数量",
   settingsViewModeDesc: "选择“设置为根目录”时，是复用单个 rooted 视图，还是继续打开多个视图。",
   settingsViewModeSingle: "只保留一个视图",
