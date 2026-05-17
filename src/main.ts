@@ -77,7 +77,6 @@ export default class SetToRootPlugin extends Plugin {
     });
 
     await this.app.workspace.revealLeaf(leaf);
-    this.app.workspace.setActiveLeaf(leaf, { focus: true });
     refreshLeafHeader(leaf);
   }
 
@@ -105,39 +104,12 @@ export default class SetToRootPlugin extends Plugin {
   }
 
   private refreshRootedLeaves(): void {
-    if (this.settings.viewMode === "single") {
-      this.enforceSingleRootedLeaf();
-    }
-
     const icon = this.getRootedViewIcon();
     for (const leaf of this.app.workspace.getLeavesOfType(ROOTED_FILE_EXPLORER_VIEW_TYPE)) {
       const view = leaf.view as View & { icon?: string };
       view.icon = icon;
       refreshLeafHeader(leaf);
     }
-  }
-
-  private enforceSingleRootedLeaf(): void {
-    const leaves = this.app.workspace.getLeavesOfType(ROOTED_FILE_EXPLORER_VIEW_TYPE);
-    if (leaves.length <= 1) {
-      return;
-    }
-
-    const activeView = this.app.workspace.getActiveViewOfType(View);
-    const activeLeaf =
-      activeView?.getViewType() === ROOTED_FILE_EXPLORER_VIEW_TYPE ? activeView.leaf : null;
-    const keepLeaf =
-      (activeLeaf && leaves.contains(activeLeaf) ? activeLeaf : null) ??
-      leaves[leaves.length - 1];
-
-    for (const leaf of leaves) {
-      if (leaf !== keepLeaf) {
-        leaf.detach();
-      }
-    }
-
-    refreshLeafHeader(keepLeaf);
-    void this.app.workspace.requestSaveLayout();
   }
 }
 
