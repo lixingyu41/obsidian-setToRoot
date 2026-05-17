@@ -2,8 +2,6 @@
 
 Open additional File Explorer tabs rooted to a specific folder.
 
-Desktop only.
-
 ## Features
 
 - Adds `Set to root` / `设置为根目录` to the folder context menu in the default File Explorer.
@@ -22,7 +20,7 @@ Desktop only.
 
 ## Development
 
-Install dependencies:
+Install dependencies once:
 
 ```bash
 npm install
@@ -40,7 +38,12 @@ Create a production build:
 npm run build
 ```
 
-Before submitting a release, update `manifest.json`, `versions.json`, and create a GitHub release whose tag matches the manifest version. The release must include `main.js`, `manifest.json`, and `styles.css`.
+Release format:
+
+- Keep `package.json` and `manifest.json` on the same `x.y.z` version.
+- Update `versions.json` through `npm version patch`, `npm version minor`, or `npm version major`.
+- Create a GitHub release whose tag matches the manifest version.
+- Attach `main.js`, `manifest.json`, and `styles.css` to the release.
 
 ## License
 
