@@ -2,6 +2,8 @@
 
 Open additional File Explorer tabs rooted to a specific folder.
 
+Desktop only.
+
 ## Features
 
 - Adds `Set to root` / `设置为根目录` to the folder context menu in the default File Explorer.
