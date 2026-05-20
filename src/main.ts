@@ -53,7 +53,7 @@ export default class SetToRootPlugin extends Plugin {
 
   private registerFolderMenu(): void {
     this.registerEvent(
-      this.app.workspace.on("file-menu", (menu: Menu, file, source) => {
+      this.app.workspace.on("file-menu", (menu: Menu, file, source, leaf) => {
         if (source !== "file-explorer-context-menu" || !(file instanceof TFolder) || file.isRoot()) {
           return;
         }
@@ -64,15 +64,15 @@ export default class SetToRootPlugin extends Plugin {
             .setTitle(t("menuSetToRoot"))
             .setIcon("lucide-panel-left-open")
             .onClick(() => {
-              void this.openRootedView(file);
+              void this.openRootedView(file, leaf);
             });
         });
       })
     );
   }
 
-  private async openRootedView(folder: TFolder): Promise<void> {
-    const leaf = this.getRootedLeaf();
+  private async openRootedView(folder: TFolder, sourceLeaf?: WorkspaceLeaf): Promise<void> {
+    const leaf = this.getRootedLeaf(sourceLeaf);
 
     await leaf.setViewState({
       type: ROOTED_FILE_EXPLORER_VIEW_TYPE,
@@ -86,11 +86,19 @@ export default class SetToRootPlugin extends Plugin {
     refreshLeafHeader(leaf);
   }
 
-  private getRootedLeaf(): WorkspaceLeaf {
+  private getRootedLeaf(sourceLeaf?: WorkspaceLeaf): WorkspaceLeaf {
     if (this.settings.viewMode === "single") {
       const existingLeaf = this.app.workspace.getLeavesOfType(ROOTED_FILE_EXPLORER_VIEW_TYPE)[0];
       if (existingLeaf) {
         return existingLeaf;
+      }
+    }
+
+    if (this.settings.openLocation === "tab") {
+      const fileExplorerLeaf = sourceLeaf ?? this.app.workspace.getLeavesOfType("file-explorer")[0];
+      if (fileExplorerLeaf) {
+        this.app.workspace.setActiveLeaf(fileExplorerLeaf, { focus: false });
+        return this.app.workspace.getLeaf("tab");
       }
     }
 

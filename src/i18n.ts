@@ -14,6 +14,10 @@ type LocaleKey =
   | "settingsViewModeDesc"
   | "settingsViewModeSingle"
   | "settingsViewModeMultiple"
+  | "settingsOpenLocationName"
+  | "settingsOpenLocationDesc"
+  | "settingsOpenLocationTab"
+  | "settingsOpenLocationLeaf"
   | "settingsViewIconName"
   | "settingsViewIconDesc"
   | "settingsViewIconChoose"
@@ -38,6 +42,10 @@ const ENGLISH: LocaleTable = {
   settingsViewModeDesc: "Choose whether Set to root reuses one rooted explorer or opens additional ones.",
   settingsViewModeSingle: "Single view",
   settingsViewModeMultiple: "Multiple views",
+  settingsOpenLocationName: "New rooted view location",
+  settingsOpenLocationDesc: "Choose whether additional rooted explorers open as a new tab or as a split leaf.",
+  settingsOpenLocationTab: "New tab",
+  settingsOpenLocationLeaf: "New leaf",
   settingsViewIconName: "Rooted view icon",
   settingsViewIconDesc: "Choose the icon used by rooted explorer tabs.",
   settingsViewIconChoose: "Choose icon",
@@ -61,6 +69,10 @@ const CHINESE: LocaleTable = {
   settingsViewModeDesc: "选择“设置为根目录”时，是复用单个 rooted 视图，还是继续打开多个视图。",
   settingsViewModeSingle: "只保留一个视图",
   settingsViewModeMultiple: "允许多个视图",
+  settingsOpenLocationName: "新根目录视图位置",
+  settingsOpenLocationDesc: "选择额外的根目录视图打开为新标签页，还是打开为新的分栏视图。",
+  settingsOpenLocationTab: "新标签页",
+  settingsOpenLocationLeaf: "新分栏视图",
   settingsViewIconName: "根目录视图图标",
   settingsViewIconDesc: "选择 rooted 视图标签使用的图标。",
   settingsViewIconChoose: "选择图标",

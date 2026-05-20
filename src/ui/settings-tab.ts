@@ -35,6 +35,22 @@ export class SetToRootSettingTab extends PluginSettingTab {
           });
       });
 
+    new Setting(containerEl)
+      .setName(t("settingsOpenLocationName"))
+      .setDesc(t("settingsOpenLocationDesc"))
+      .addDropdown((dropdown) => {
+        dropdown
+          .addOption("tab", t("settingsOpenLocationTab"))
+          .addOption("leaf", t("settingsOpenLocationLeaf"))
+          .setValue(this.plugin.settings.openLocation)
+          .onChange(async (value) => {
+            await this.plugin.updateSettings({
+              ...this.plugin.settings,
+              openLocation: value === "leaf" ? "leaf" : "tab"
+            });
+          });
+      });
+
     const iconSetting = new Setting(containerEl)
       .setName(t("settingsViewIconName"))
       .setDesc(t("settingsViewIconDesc"))

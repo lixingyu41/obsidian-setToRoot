@@ -1,14 +1,17 @@
 import { getIconIds } from "obsidian";
 
 export type RootedViewMode = "single" | "multiple";
+export type RootedOpenLocation = "tab" | "leaf";
 
 export interface SetToRootSettings {
   viewMode: RootedViewMode;
+  openLocation: RootedOpenLocation;
   viewIcon: string;
 }
 
 export const DEFAULT_SETTINGS: SetToRootSettings = {
   viewMode: "multiple",
+  openLocation: "tab",
   viewIcon: "lucide-folder-closed"
 };
 
@@ -17,6 +20,7 @@ export function normalizeSettings(data: unknown): SetToRootSettings {
 
   return {
     viewMode: settings.viewMode === "single" ? "single" : "multiple",
+    openLocation: settings.openLocation === "leaf" ? "leaf" : "tab",
     viewIcon: resolveViewIcon(settings.viewIcon)
   };
 }

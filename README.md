@@ -26,6 +26,9 @@ Desktop only.
 - `Rooted view instances`
   - `Single view`: reuse one rooted explorer and replace its root folder.
   - `Multiple views`: open multiple rooted explorers.
+- `New rooted view location`
+  - `New tab`: open additional rooted explorers as tabs next to the File Explorer.
+  - `New leaf`: open additional rooted explorers as split sidebar leaves.
 - `Rooted view icon`
   - Choose the tab icon used by rooted explorer views.
 
