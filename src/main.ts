@@ -1,7 +1,10 @@
 import { Menu, Plugin, TFolder, WorkspaceLeaf } from "obsidian";
 
-import { ROOTED_FILE_EXPLORER_VIEW_TYPE } from "./constants";
 import { t } from "./i18n";
+import {
+  ROOTED_FILE_EXPLORER_VIEW_TYPE,
+  createRootedFileExplorerViewWithOptions
+} from "./rooted-file-explorer";
 import {
   DEFAULT_SETTINGS,
   normalizeSettings,
@@ -9,7 +12,6 @@ import {
   type SetToRootSettings
 } from "./settings";
 import { SetToRootSettingTab } from "./ui/settings-tab";
-import { RootedFileExplorerView } from "./views/rooted-file-explorer-view";
 
 export default class SetToRootPlugin extends Plugin {
   settings: SetToRootSettings = DEFAULT_SETTINGS;
@@ -19,7 +21,10 @@ export default class SetToRootPlugin extends Plugin {
 
     this.registerView(
       ROOTED_FILE_EXPLORER_VIEW_TYPE,
-      (leaf) => new RootedFileExplorerView(leaf, () => this.getRootedViewIcon())
+      (leaf) =>
+        createRootedFileExplorerViewWithOptions(this.app, leaf, {
+          getIcon: () => this.getRootedViewIcon()
+        })
     );
 
     this.addSettingTab(new SetToRootSettingTab(this.app, this));
@@ -74,6 +79,7 @@ export default class SetToRootPlugin extends Plugin {
     });
 
     await this.app.workspace.revealLeaf(leaf);
+    this.app.workspace.setActiveLeaf(leaf, { focus: true });
     await this.app.workspace.requestSaveLayout();
     refreshLeafHeader(leaf);
   }
@@ -94,10 +100,10 @@ export default class SetToRootPlugin extends Plugin {
   }
 
   private refreshRootedViews(): void {
+    const icon = this.getRootedViewIcon();
     for (const leaf of this.app.workspace.getLeavesOfType(ROOTED_FILE_EXPLORER_VIEW_TYPE)) {
-      if (leaf.view instanceof RootedFileExplorerView) {
-        leaf.view.refresh();
-      }
+      const view = leaf.view as { icon?: string };
+      view.icon = icon;
       refreshLeafHeader(leaf);
     }
   }

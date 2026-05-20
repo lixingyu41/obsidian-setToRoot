@@ -1,6 +1,6 @@
 {
   "name": "set-to-root",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Open additional File Explorer tabs rooted to a specific folder.",
   "main": "main.js",
   "type": "module",
