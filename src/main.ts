@@ -1,5 +1,6 @@
 import { Menu, Plugin, TFolder, WorkspaceLeaf } from "obsidian";
 
+import { FileExplorerCompatibilityBridge } from "./file-explorer-compatibility";
 import { t } from "./i18n";
 import {
   ROOTED_FILE_EXPLORER_VIEW_TYPE,
@@ -29,6 +30,7 @@ export default class SetToRootPlugin extends Plugin {
 
     this.addSettingTab(new SetToRootSettingTab(this.app, this));
     this.registerFolderMenu();
+    new FileExplorerCompatibilityBridge(this).start();
   }
 
   override onunload(): void {
