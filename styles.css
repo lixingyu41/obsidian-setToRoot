@@ -6,26 +6,12 @@
 .set-to-root-view > .nav-files-container {
   height: 100%;
   overflow: auto;
-  padding: var(--size-4-2) 0;
 }
 
 .set-to-root-view .set-to-root-root > .nav-folder-children {
   border-left: 0;
   margin-left: 0;
   padding-left: 0;
-}
-
-.set-to-root-view .nav-folder-title,
-.set-to-root-view .nav-file-title {
-  cursor: pointer;
-}
-
-.set-to-root-view .nav-folder-title-content,
-.set-to-root-view .nav-file-title-content {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .set-to-root-empty-state {

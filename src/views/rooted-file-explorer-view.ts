@@ -13,14 +13,26 @@ import {
 import { ROOTED_FILE_EXPLORER_VIEW_TYPE } from "../constants";
 import { t } from "../i18n";
 
+type NativeLikeFileItem = {
+  childrenEl: HTMLElement | null;
+  el: HTMLElement;
+  file: TAbstractFile;
+  selfEl: HTMLElement;
+  titleEl: HTMLElement;
+  titleInnerEl: HTMLElement;
+};
+
 interface RootedFileExplorerState {
   rootPath: string | null;
 }
 
 export class RootedFileExplorerView extends ItemView {
+  fileItems: Record<string, NativeLikeFileItem> = {};
+
   private rootPath: string | null = null;
   private originalContainerDataType: string | null = null;
   private readonly expandedFolders = new Set<string>();
+  private compatibilityRefreshFrame: number | null = null;
 
   constructor(leaf: WorkspaceLeaf, private readonly getViewIcon: () => string) {
     super(leaf);
@@ -76,12 +88,21 @@ export class RootedFileExplorerView extends ItemView {
     this.containerEl.removeAttribute("data-set-to-root-view-type");
     this.containerEl.removeClass("file-explorer");
     this.containerEl.removeClass("set-to-root-file-explorer");
+    this.containerEl.removeClass("mod-set-to-root");
     this.contentEl.removeClass("file-explorer");
     this.contentEl.removeClass("set-to-root-view");
+    this.contentEl.removeClass("mod-rooted-file-explorer");
+    this.contentEl.removeAttribute("data-path");
+    this.fileItems = {};
+    if (this.compatibilityRefreshFrame !== null) {
+      window.cancelAnimationFrame(this.compatibilityRefreshFrame);
+      this.compatibilityRefreshFrame = null;
+    }
   }
 
   refresh(): void {
     this.icon = this.getViewIcon();
+    this.fileItems = {};
     this.contentEl.empty();
 
     const rootFolder = this.getRootFolder();
@@ -91,6 +112,9 @@ export class RootedFileExplorerView extends ItemView {
       return;
     }
 
+    this.containerEl.addClass("mod-set-to-root");
+    this.contentEl.addClass("mod-rooted-file-explorer");
+    this.contentEl.setAttr("data-path", rootFolder.path);
     this.expandedFolders.add(rootFolder.path);
 
     const treeEl = this.contentEl.createDiv({
@@ -103,17 +127,19 @@ export class RootedFileExplorerView extends ItemView {
 
     const rootEl = treeEl.createDiv({
       cls: "tree-item nav-folder mod-root set-to-root-root",
-      attr: { "data-path": rootFolder.path }
+      attr: getFileAttributes(rootFolder)
     });
     const rootChildrenEl = rootEl.createDiv({
       cls: "tree-item-children nav-folder-children",
       attr: { role: "group" }
     });
+    this.registerNativeLikeFileItem(rootFolder, rootEl, rootEl, rootEl, rootChildrenEl);
 
     for (const child of sortFiles(rootFolder.children)) {
       this.renderNode(child, rootChildrenEl);
     }
 
+    this.queueCompatibilityRefresh();
     refreshLeafHeader(this.leaf);
   }
 
@@ -170,7 +196,7 @@ export class RootedFileExplorerView extends ItemView {
       ]
         .filter(Boolean)
         .join(" "),
-      attr: { "data-path": file.path }
+      attr: getFileAttributes(file)
     });
 
     const rowEl = nodeEl.createDiv({
@@ -184,7 +210,7 @@ export class RootedFileExplorerView extends ItemView {
         .join(" "),
       attr: {
         role: "treeitem",
-        "data-path": file.path,
+        ...getFileAttributes(file),
         "aria-selected": String(isActiveFile)
       }
     });
@@ -195,10 +221,11 @@ export class RootedFileExplorerView extends ItemView {
       setIcon(collapseIconEl, "right-triangle");
     }
 
-    rowEl.createDiv({
+    const titleInnerEl = rowEl.createDiv({
       cls: isFolder ? "tree-item-inner nav-folder-title-content" : "tree-item-inner nav-file-title-content",
-      text: file.name
+      text: getNativeDisplayName(file)
     });
+    this.registerNativeLikeFileItem(file, nodeEl, rowEl, titleInnerEl, null);
 
     rowEl.addEventListener("click", (event) => {
       event.preventDefault();
@@ -218,6 +245,10 @@ export class RootedFileExplorerView extends ItemView {
       cls: "tree-item-children nav-folder-children",
       attr: { role: "group" }
     });
+    const fileItem = this.fileItems[file.path];
+    if (fileItem) {
+      fileItem.childrenEl = childrenEl;
+    }
     for (const child of sortFiles(file.children)) {
       this.renderNode(child, childrenEl);
     }
@@ -247,13 +278,7 @@ export class RootedFileExplorerView extends ItemView {
   private showContextMenu(file: TAbstractFile, event: MouseEvent): void {
     const menu = new Menu();
 
-    if (file instanceof TFolder) {
-      menu.addItem((item) => {
-        item.setTitle(t("menuSetToRoot")).setIcon("lucide-panel-left-open").onClick(() => {
-          void this.setRoot(file);
-        });
-      });
-    }
+    this.app.workspace.trigger("file-menu", menu, file, "file-explorer-context-menu", this.leaf);
 
     if (file instanceof TFile) {
       menu.addItem((item) => {
@@ -264,6 +289,34 @@ export class RootedFileExplorerView extends ItemView {
     }
 
     menu.showAtMouseEvent(event);
+  }
+
+  private registerNativeLikeFileItem(
+    file: TAbstractFile,
+    el: HTMLElement,
+    selfEl: HTMLElement,
+    titleInnerEl: HTMLElement,
+    childrenEl: HTMLElement | null
+  ): void {
+    this.fileItems[file.path] = {
+      childrenEl,
+      el,
+      file,
+      selfEl,
+      titleEl: selfEl,
+      titleInnerEl
+    };
+  }
+
+  private queueCompatibilityRefresh(): void {
+    if (this.compatibilityRefreshFrame !== null) {
+      window.cancelAnimationFrame(this.compatibilityRefreshFrame);
+    }
+
+    this.compatibilityRefreshFrame = window.requestAnimationFrame(() => {
+      this.compatibilityRefreshFrame = null;
+      this.app.workspace.trigger("layout-change");
+    });
   }
 
   private async setRoot(folder: TFolder): Promise<void> {
@@ -308,6 +361,32 @@ function sortFiles(files: TAbstractFile[]): TAbstractFile[] {
 
     return left.name.localeCompare(right.name);
   });
+}
+
+function getNativeDisplayName(file: TAbstractFile): string {
+  if (file instanceof TFile && file.extension === "md") {
+    return file.basename;
+  }
+
+  return file.name;
+}
+
+function getFileAttributes(file: TAbstractFile): Record<string, string> {
+  const attributes: Record<string, string> = {
+    "data-path": file.path
+  };
+
+  if (file instanceof TFile) {
+    attributes["data-file-basename"] = file.basename;
+    attributes["data-file-extension"] = file.extension;
+    attributes["data-file-name"] = file.name;
+    attributes["data-file-path"] = file.path;
+  } else if (file instanceof TFolder) {
+    attributes["data-folder-name"] = file.name;
+    attributes["data-folder-path"] = file.path;
+  }
+
+  return attributes;
 }
 
 function getLastPathSegment(path: string): string {
