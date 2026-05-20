@@ -1,16 +1,26 @@
 # Set to Root
 
-Open additional File Explorer tabs rooted to a specific folder.
+Language: English | [中文](README.zh-CN.md)
+
+Open additional Obsidian File Explorer tabs rooted to a specific folder.
 
 Desktop only.
 
 ## Features
 
-- Adds `Set to root` / `设置为根目录` to the folder context menu in the default File Explorer.
+- Adds `Set to root` to folder context menus in the default File Explorer.
 - Opens a dedicated rooted explorer view without changing Obsidian's built-in full-vault File Explorer.
+- Matches the look of Obsidian's File Explorer and follows compatible themes and plugin styling.
 - Supports either a single rooted view or multiple rooted views.
 - Restores rooted views after restarting Obsidian.
-- Lets you choose the icon used by rooted views from a searchable icon picker.
+- Lets you choose the icon used by rooted explorer tabs from a searchable icon picker.
+
+## Usage
+
+1. Open Obsidian's default File Explorer.
+2. Right-click a folder.
+3. Choose `Set to root`.
+4. Use the new rooted explorer tab to browse that folder as its own file tree.
 
 ## Settings
 
@@ -19,33 +29,6 @@ Desktop only.
   - `Multiple views`: open multiple rooted explorers.
 - `Rooted view icon`
   - Choose the tab icon used by rooted explorer views.
-
-## Development
-
-Install dependencies once:
-
-```bash
-npm install
-```
-
-Start a development build that watches source files:
-
-```bash
-npm run dev
-```
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-Release format:
-
-- Keep `package.json` and `manifest.json` on the same `x.y.z` version.
-- Update `versions.json` through `npm version patch`, `npm version minor`, or `npm version major`.
-- Create a GitHub release whose tag matches the manifest version.
-- Attach `main.js`, `manifest.json`, and `styles.css` to the release.
 
 ## License
 
