@@ -10,7 +10,6 @@ Desktop only.
 
 - Adds `Set to root` to folder context menus in the default File Explorer.
 - Opens a dedicated rooted explorer view without changing Obsidian's built-in full-vault File Explorer.
-- Matches the look of Obsidian's File Explorer and follows compatible themes and plugin styling.
 - Supports either a single rooted view or multiple rooted views.
 - Restores rooted views after restarting Obsidian.
 - Lets you choose the icon used by rooted explorer tabs from a searchable icon picker.
