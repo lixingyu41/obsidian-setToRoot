@@ -1,4 +1,4 @@
-import { Menu, Plugin, TFolder, WorkspaceLeaf } from "obsidian";
+import { Menu, Plugin, TFolder, type WorkspaceLeaf, type WorkspaceSplit } from "obsidian";
 
 import { FileExplorerCompatibilityBridge } from "./file-explorer-compatibility";
 import { t } from "./i18n";
@@ -97,8 +97,8 @@ export default class SetToRootPlugin extends Plugin {
     if (this.settings.openLocation === "tab") {
       const fileExplorerLeaf = sourceLeaf ?? this.app.workspace.getLeavesOfType("file-explorer")[0];
       if (fileExplorerLeaf) {
-        this.app.workspace.setActiveLeaf(fileExplorerLeaf, { focus: false });
-        return this.app.workspace.getLeaf("tab");
+        // Keep the rooted explorer in the same sidebar tab strip as the File Explorer.
+        return this.app.workspace.createLeafInParent(fileExplorerLeaf.parent as unknown as WorkspaceSplit, -1);
       }
     }
 
